@@ -1,3 +1,5 @@
-.*
+/.gitignore
+/.classpath
+/.settings/*
 /gen
 /bin
