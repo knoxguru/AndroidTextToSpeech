@@ -10,8 +10,10 @@ import android.telephony.SmsMessage;
 public class SMSReceiver extends BroadcastReceiver {
 
 	private static final String ACTION_SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+	public static boolean START_STICKY = false;
 	private Intent mIntent;
-	private String txtText;
+	private String txtText ="";
+	
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -25,9 +27,12 @@ public class SMSReceiver extends BroadcastReceiver {
 			SmsMessage[] msgs = getMessagesFromIntent(mIntent);
 			if (msgs != null) {
 				for (int i = 0; i < msgs.length; i++) {
-					txtText += msgs[i].getMessageBody().toString();
-					txtText += "\n";
+					String l = msgs[i].getMessageBody().toString();
+					if (l != null || l != "null") 
+						txtText += msgs[i].getMessageBody().toString() + "\n";
 				}
+			} else {
+				txtText = "Could not get message to read";
 			}
 			
 			Intent i = new Intent();

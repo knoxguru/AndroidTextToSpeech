@@ -9,12 +9,22 @@
     tools:context=".ReadActivity" >
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/play_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="121dp"
         android:text="@string/play_msg" />
+
+    <TextView
+        android:id="@+id/display_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/button2"
+        android:layout_marginLeft="41dp"
+        android:layout_marginTop="43dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
