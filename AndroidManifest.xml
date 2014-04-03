@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.knoxguru.texttospeech"
+<<<<<<< HEAD
     android:versionCode="4"
     android:versionName="1.3" >
+=======
+<<<<<<< HEAD
+    android:versionCode="4"
+    android:versionName="1.3" >
+=======
+    android:versionCode="3"
+    android:versionName="1.2" >
+>>>>>>> bf83627b8a5881523a549359a4a0754795cf0fc6
+>>>>>>> cad6c2a32eec28368f81f938dcf51f6e35ee1b75
 
     <uses-sdk
         android:minSdkVersion="15"
