@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/button2"
+        android:layout_below="@+id/play_btn"
         android:layout_marginLeft="41dp"
         android:layout_marginTop="43dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
