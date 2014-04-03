@@ -10,26 +10,36 @@ import android.speech.tts.TextToSpeech.*;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.os.PowerManager.WakeLock;
 
 
 public class ReadActivity extends Activity implements OnInitListener {
 	
-	private TextToSpeech tts;
+	private TextToSpeech tts = null;
 	private String txtText;
 	WakeLock fullWakeLock;
 	WakeLock partialWakeLock;
-	
+	public static final String PREFS_NAME = "ttsPrefsFile";
+	SharedPreferences settings;
+	boolean autoPlay = false;
+
+
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_read);
-
+		
+        tts = new TextToSpeech(this, this);
+        tts.setOnUtteranceProgressListener(new ttsUtteranceListener(this));
+        
 		if (savedInstanceState == null) {
 		    Bundle extras = getIntent().getExtras();
 		    if(extras == null) {
@@ -41,11 +51,17 @@ public class ReadActivity extends Activity implements OnInitListener {
 		    txtText = (String) savedInstanceState.getSerializable("sms");
 		}
 		
-		tts = new TextToSpeech(this, this);
+		settings = getSharedPreferences(PREFS_NAME, 0);
+		autoPlay = settings.getBoolean("AUTO_PLAY", false);
 		
-		tts.setOnUtteranceProgressListener(new ttsUtteranceListener(this));
+		if (txtText == null || txtText == "")
+				txtText = "Could not get message";
+
+		TextView et = (TextView) findViewById(R.id.display_msg);
+		et.setText(txtText);
 		
-		Button b = (Button) findViewById(R.id.button2);
+		
+		Button b = (Button) findViewById(R.id.play_btn);
 
 		b.setOnClickListener(new View.OnClickListener() {
 
@@ -54,8 +70,9 @@ public class ReadActivity extends Activity implements OnInitListener {
 				speakOut(txtText);
 			}
 		});
+			
 	}
-	
+		
 	@Override
     public void onDestroy() {
         if (tts != null) {
@@ -80,15 +97,22 @@ public class ReadActivity extends Activity implements OnInitListener {
             if (result == TextToSpeech.LANG_MISSING_DATA
                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.e("TTS", "This Language is not supported");
-            }  
+            }  else {
+            	// we are ready to play if autoplay is set
+            	if (autoPlay == true) {
+        			Toast.makeText(getApplicationContext(), "Auto Play Activated", Toast.LENGTH_SHORT).show();
+        			speakOut(txtText);
+        		}	
+            }
         } else {
+        	Toast.makeText(this, "TTS Initilization Failed!", Toast.LENGTH_LONG).show();
             Log.e("TTS", "Initilization Failed!");
         }
 		
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-	    if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP) && txtText != null) {
+	    if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
 	    	speakOut(txtText);
 	    	return false;
 	    }
@@ -98,16 +122,14 @@ public class ReadActivity extends Activity implements OnInitListener {
 
 	private void speakOut(String txt) {
 		
-		if (txt == null) {
-			return;
+		if (txt.length() > 0) {		
+			HashMap<String, String> map = new HashMap<String, String>();
+			Random r = new Random();
+			int i1 = r.nextInt(10000000);
+			map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueID"+i1);
+			
+			tts.speak(txt, TextToSpeech.QUEUE_FLUSH, map);
 		}
-		
-		HashMap<String, String> map = new HashMap<String, String>();
-		Random r = new Random();
-		int i1 = r.nextInt(10000000);
-		map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueID"+i1);
-        tts.speak(txt, TextToSpeech.QUEUE_ADD, map);
-        
     }
 
 

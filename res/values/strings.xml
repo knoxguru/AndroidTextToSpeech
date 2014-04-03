@@ -8,5 +8,6 @@
     <string name="kill_me">End Service</string>
     <string name="play_msg">Play Message</string>
     <string name="start_service">Start Service</string>
+    <string name="auto_play_btn_text">Auto Play Msg</string>
 
 </resources>
