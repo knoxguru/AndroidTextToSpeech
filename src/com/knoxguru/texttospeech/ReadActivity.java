@@ -3,13 +3,19 @@ package com.knoxguru.texttospeech;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.*;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothHeadset;
+import android.bluetooth.BluetoothProfile;
 import android.content.SharedPreferences;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -122,15 +128,22 @@ public class ReadActivity extends Activity implements OnInitListener {
 
 	private void speakOut(String txt) {
 		
+		
 		if (txt.length() > 0) {		
 			HashMap<String, String> map = new HashMap<String, String>();
 			Random r = new Random();
 			int i1 = r.nextInt(10000000);
 			map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueID"+i1);
 			
+			// for bluetooth enabled devices
+			map.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_VOICE_CALL));
+			
 			tts.speak(txt, TextToSpeech.QUEUE_FLUSH, map);
 		}
+		
     }
+	
+	
 
 
 	class ttsUtteranceListener extends UtteranceProgressListener {
