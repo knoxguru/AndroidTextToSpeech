@@ -69,6 +69,24 @@ public class MainActivity extends Activity {
 				toggleAutoStop(isChecked);
 			}
 		});
+		
+		CheckBox btBtn = (CheckBox) findViewById(R.id.disable_bt_btn);
+		btBtn.setChecked(settings.getBoolean("BT_ON", false));
+
+		btBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				toggleBluetooth(isChecked);
+			}
+		});
+	}
+	
+	public void toggleBluetooth(boolean a) {
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putBoolean("BT_ON", a);
+		editor.commit();
 	}
 
 	public void toggleAutoStop(boolean a) {

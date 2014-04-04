@@ -21,6 +21,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.os.PowerManager.WakeLock;
@@ -36,6 +37,7 @@ public class ReadActivity extends Activity implements OnInitListener {
 	SharedPreferences settings;
 	boolean autoPlay = false;
 	boolean playing = false;
+	boolean btOn = true;
 
 
     
@@ -60,6 +62,7 @@ public class ReadActivity extends Activity implements OnInitListener {
 		
 		settings = getSharedPreferences(PREFS_NAME, 0);
 		autoPlay = settings.getBoolean("AUTO_PLAY", false);
+		btOn = settings.getBoolean("BT_ON", false);
 		
 		if (txtText == null || txtText == "")
 				txtText = "Could not get message";
@@ -140,7 +143,10 @@ public class ReadActivity extends Activity implements OnInitListener {
 			map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "UniqueID"+i1);
 			
 			// for bluetooth enabled devices
-			map.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_VOICE_CALL));
+			if (btOn) {
+				map.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_VOICE_CALL));
+				map.put(TextToSpeech.Engine.KEY_PARAM_VOLUME, String.valueOf(1));
+			}
 			
 			tts.speak(txt, TextToSpeech.QUEUE_FLUSH, map);
 		}
