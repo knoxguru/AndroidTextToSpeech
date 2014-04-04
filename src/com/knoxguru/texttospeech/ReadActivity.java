@@ -35,6 +35,7 @@ public class ReadActivity extends Activity implements OnInitListener {
 	public static final String PREFS_NAME = "ttsPrefsFile";
 	SharedPreferences settings;
 	boolean autoPlay = false;
+	boolean playing = false;
 
 
     
@@ -72,8 +73,9 @@ public class ReadActivity extends Activity implements OnInitListener {
 		b.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v) {	
-				speakOut(txtText);
+			public void onClick(View v) {
+				if (!playing)
+					speakOut(txtText);
 			}
 		});
 			
@@ -118,18 +120,20 @@ public class ReadActivity extends Activity implements OnInitListener {
 	}
 	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-	    if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-	    	speakOut(txtText);
-	    	return false;
+		
+	    if (playing || (keyCode != KeyEvent.KEYCODE_VOLUME_DOWN && keyCode != KeyEvent.KEYCODE_VOLUME_UP)) {
+	    	return super.onKeyDown(keyCode, event);
 	    }
-	    return super.onKeyDown(keyCode, event);
+	    
+	    speakOut(txtText);
+	    return true;
 	}
 	
 
 	private void speakOut(String txt) {
 		
-		
-		if (txt.length() > 0) {		
+		playing = true;
+		if (txt.length() > 0) {	
 			HashMap<String, String> map = new HashMap<String, String>();
 			Random r = new Random();
 			int i1 = r.nextInt(10000000);
@@ -140,6 +144,7 @@ public class ReadActivity extends Activity implements OnInitListener {
 			
 			tts.speak(txt, TextToSpeech.QUEUE_FLUSH, map);
 		}
+		playing = false;
 		
     }
 	

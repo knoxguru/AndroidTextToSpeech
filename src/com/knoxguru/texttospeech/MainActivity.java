@@ -52,6 +52,8 @@ public class MainActivity extends Activity {
 				} else {
 					enableBroadcastReceiver(v);
 					b.setText("End Service");
+					Toast.makeText(getApplicationContext(), "Service Started",
+							Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -73,8 +75,6 @@ public class MainActivity extends Activity {
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean("AUTO_PLAY", a);
 		editor.commit();
-		Toast.makeText(getApplicationContext(), "Changed Auto Play setting",
-				Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
@@ -90,8 +90,6 @@ public class MainActivity extends Activity {
 		pm.setComponentEnabledSetting(receiver,
 				PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
 				PackageManager.DONT_KILL_APP);
-		Toast.makeText(getApplicationContext(), "Service Started",
-				Toast.LENGTH_SHORT).show();
 	}
 
 	public void disableBroadcastReceiver(View view) {
